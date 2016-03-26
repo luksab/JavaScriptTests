@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+
+<body>
+
+	<canvas height=500; id="canvas" style="border: 1px solid" width=500;>
+	</canvas>
+	<script type="text/javascript">
+				
+	
+				var canvas = document.getElementById('canvas');
+				canvas.width  = window.innerWidth -30 ;
+				canvas.height = window.innerHeight/2;
+				var ctx = canvas.getContext('2d');
+				var raf;
+
+				ball = {
+					x: 100,
+					y: 100,
+					vx: 10,
+					vy: -10,
+					g:9.80665,
+					c:0.01,
+					hard:0.9,
+					radius: 25,
+					color: 'blue',
+					draw: function() {
+						ctx.beginPath();
+						ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, true);
+						ctx.closePath();
+						ctx.fillStyle = this.color;
+						ctx.fill();
+					}
+				};
+
+				function draw() {
+					ctx.clearRect(0, 0, canvas.width, canvas.height);
+					
+					
+					if(ball.y+ball.radius > canvas.height){
+						ball.y -= 0.1
+					}
+					else{
+						ball.vy += ball.g/60;
+						ball.vy -= ball.vy * ball.c;
+						ball.y += ball.vy;
+						if (ball.y+ball.vy+ball.radius>= canvas.height ||
+							ball.y+ball.vy-ball.radius<= 0) {
+							ball.vy = -ball.vy;
+							ball.vy *= ball.hard;
+						}
+					}
+					
+					if(ball.x+ball.radius > canvas.width){
+						ball.x -= 0.1
+					}
+					else{
+						//ball.vx += 9.80665/60;
+						ball.vx -= ball.vx * ball.c;
+						ball.x += ball.vx;
+						if (ball.x+ball.vx+ball.radius>= canvas.width ||
+							ball.x+ball.vx-ball.radius<= 0) {
+							ball.vx = -ball.vx;
+							ball.vx *= ball.hard;
+						}
+					}
+					
+					ball.draw();
+
+					raf = window.requestAnimationFrame(draw);
+				}
+
+				canvas.addEventListener('mouseover', function(e) {
+					raf = window.requestAnimationFrame(draw);
+				});
+	
+				canvas.addEventListener("mouseout", function(e) {
+	               window.cancelAnimationFrame(raf);
+				});
+				
+				canvas.addEventListener("click", function(e) {
+	               alert("you Clicked me");
+				});
+	
+				ball.draw();
+		</script>
+		<p>Drag:    <input type="number" id="cInput" value="0.01"></p>
+		<p>Gravity: <input type="number" id="gInput" value="9.80665"></p>
+		<p>SpeedX:  <input type="number" id="vxInput" value="10"></p>
+		<p>SpeedY:  <input type="number" id="vyInput" value="-10"></p>
+		<p>Bouncyness:  <input type="number" id="hard" value="0.9"></p>
+		<p><button onclick="ButtonKlick()">Try it</button></p>
+		<script>
+			function ButtonKlick() {
+			var x = parseFloat(document.getElementById("vxInput").value);
+			var y = parseFloat(document.getElementById("vyInput").value);
+			var c = parseFloat(document.getElementById("cInput").value);
+			var g = parseFloat(document.getElementById("gInput").value);
+			var h = parseFloat(document.getElementById("hard").value);
+			ball.x = 100;
+			ball.y = 100;
+			ball.vx  = x;
+			ball.vy  = y;
+			ball.c   = c;
+			ball.g   = g;
+			ball.hard= h;
+			}
+		</script>
+	</body>
+</html>
