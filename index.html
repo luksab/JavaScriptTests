@@ -16,14 +16,15 @@
 				canvas.height = window.innerHeight/2;
 				var ctx = canvas.getContext('2d');
 				var raf;
+				opa = 1;
 
 				ball = {
 					x: 100,
-					y: 100,
-					vx: 10,
+					y: canvas.height - 100,
+					vx: 40,
 					vy: -10,
 					g:9.80665,
-					c:0.01,
+					c:0.001,
 					hard:0.9,
 					radius: 25,
 					color: 'blue',
@@ -35,17 +36,30 @@
 						ctx.fill();
 					}
 				};
+				
+				function rgba(r, g, b, a){
+					r = Math.floor(r);
+					g = Math.floor(g);
+					b = Math.floor(b);
+					return ["rgba(",r,",",g,",",b,",",a,")"].join("");
+				}
+
 
 				function draw() {
-					ctx.clearRect(0, 0, canvas.width, canvas.height);
-					
+					ctx.fillStyle = rgba(255,255,255,opa);
+					ctx.fillRect(0, 0, canvas.width, canvas.height);
 					
 					if(ball.y+ball.radius > canvas.height){
 						ball.y -= 0.1
 					}
 					else{
 						ball.vy += ball.g/60;
-						ball.vy -= ball.vy * ball.c;
+						if(ball.vy > 0){
+						ball.vy -= (ball.vy*ball.vy) * ball.c;
+						}
+						else if(ball.vy < 0){
+						ball.vy += (ball.vy*ball.vy) * ball.c;
+						}
 						ball.y += ball.vy;
 						if (ball.y+ball.vy+ball.radius>= canvas.height ||
 							ball.y+ball.vy-ball.radius<= 0) {
@@ -59,7 +73,12 @@
 					}
 					else{
 						//ball.vx += 9.80665/60;
-						ball.vx -= ball.vx * ball.c;
+						if(ball.vx > 0){
+						ball.vx -= (ball.vx*ball.vx) * ball.c;
+						}
+						else{
+						ball.vx += (ball.vx*ball.vx) * ball.c;
+						}
 						ball.x += ball.vx;
 						if (ball.x+ball.vx+ball.radius>= canvas.width ||
 							ball.x+ball.vx-ball.radius<= 0) {
@@ -69,6 +88,7 @@
 					}
 					
 					ball.draw();
+					
 
 					raf = window.requestAnimationFrame(draw);
 				}
@@ -87,26 +107,27 @@
 	
 				ball.draw();
 		</script>
-		<p>Drag:    <input type="number" id="cInput" value="0.01"></p>
+		<p>Drag:    <input type="number" id="cInput" value="0.001"></p>
 		<p>Gravity: <input type="number" id="gInput" value="9.80665"></p>
-		<p>SpeedX:  <input type="number" id="vxInput" value="10"></p>
-		<p>SpeedY:  <input type="number" id="vyInput" value="-10"></p>
+		<p>SpeedX:  <input type="number" id="vxInput" value="40"></p>
+		<p>SpeedY:  <input type="number" id="vyInput" value="10"></p>
+		<p>PosX:  <input type="number" id="xInput" value="100"></p>
+		<p>PosY:  <input type="number" id="yInput" value="100"></p>
 		<p>Bouncyness:  <input type="number" id="hard" value="0.9"></p>
+		<p>Layer:  <input type="number" id="opa" value="1"></p>
 		<p><button onclick="ButtonKlick()">Try it</button></p>
 		<script>
+			var canvas = document.getElementById('canvas');
+			var height = canvas.height;
 			function ButtonKlick() {
-			var x = parseFloat(document.getElementById("vxInput").value);
-			var y = parseFloat(document.getElementById("vyInput").value);
-			var c = parseFloat(document.getElementById("cInput").value);
-			var g = parseFloat(document.getElementById("gInput").value);
-			var h = parseFloat(document.getElementById("hard").value);
-			ball.x = 100;
-			ball.y = 100;
-			ball.vx  = x;
-			ball.vy  = y;
-			ball.c   = c;
-			ball.g   = g;
-			ball.hard= h;
+			ball.vx = parseFloat(document.getElementById("vxInput").value);
+			ball.vy = - parseFloat(document.getElementById("vyInput").value);
+			ball.x = parseFloat(document.getElementById("xInput").value);
+			ball.y = height - parseFloat(document.getElementById("yInput").value);
+			ball.c = parseFloat(document.getElementById("cInput").value);
+			ball.g = parseFloat(document.getElementById("gInput").value);
+			ball.h = parseFloat(document.getElementById("hard").value);
+			opa   = parseFloat(document.getElementById("opa").value);
 			}
 		</script>
 	</body>
