@@ -64,6 +64,7 @@
 							ball.y+ball.vy-ball.radius<= 0) {
 							ball.vy = -ball.vy;
 							ball.vy *= ball.hard;
+							ball.vx *= ball.hard;
 						}
 					}
 					
@@ -82,6 +83,7 @@
 							ball.x+ball.vx-ball.radius<= 0) {
 							ball.vx = -ball.vx;
 							ball.vx *= ball.hard;
+							ball.vy *= ball.hard;
 						}
 					}
 					
