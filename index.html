@@ -29,6 +29,8 @@
 					radius: 25,
 					color: 'blue',
 					draw: function() {
+						ctx.fillStyle = rgba(255,255,255,opa);
+						ctx.fillRect(0, 0, canvas.width, canvas.height);
 						ctx.beginPath();
 						ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, true);
 						ctx.closePath();
@@ -46,9 +48,6 @@
 
 
 				function draw() {
-					ctx.fillStyle = rgba(255,255,255,opa);
-					ctx.fillRect(0, 0, canvas.width, canvas.height);
-					
 					if(ball.y+ball.radius > canvas.height){
 						ball.y -= 0.1
 					}
@@ -72,7 +71,6 @@
 						ball.x -= 0.1
 					}
 					else{
-						//ball.vx += 9.80665/60;
 						if(ball.vx > 0){
 						ball.vx -= (ball.vx*ball.vx) * ball.c;
 						}
@@ -126,7 +124,9 @@
 			ball.y = height - parseFloat(document.getElementById("yInput").value);
 			ball.c = parseFloat(document.getElementById("cInput").value);
 			ball.g = parseFloat(document.getElementById("gInput").value);
-			ball.h = parseFloat(document.getElementById("hard").value);
+			ball.hard = parseFloat(document.getElementById("hard").value);
+			opa = 1;
+			ball.draw();
 			opa   = parseFloat(document.getElementById("opa").value);
 			}
 		</script>
